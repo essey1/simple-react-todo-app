@@ -3,10 +3,37 @@ import './style.css'
 
 export default function App() {
   const [newItem, setNewItem] = useState("")
+  const [todos, setTodos] = useState([])
+
+  function handleSubmit(e) {
+    e.preventDefault()
+
+    setTodos(currentTodos => {
+      return [
+        ...currentTodos,
+        { id: crypto.randomUUID(), title: newItem, completed: false },
+      ]
+    })
+
+    setNewItem("")
+  }
+
+  function toggleTodo(id, completed) {
+    setTodos(currentTodos => {
+      return currentTodos.map(todo => {
+        if (todo.id === id) {
+          todo.completed = completed
+          return { ...todo, completed }
+        }
+
+        return todo
+      })
+    })
+  }
 
   return (
     <>
-      <form  className="add-todo-form">
+      <form onSubmit={handleSubmit} className="add-todo-form">
         <div className="form-row">
           <label htmlFor="add-todo">New Item</label>
           <input 
@@ -20,22 +47,17 @@ export default function App() {
       </form>
       <h1 className="heading">Todo List</h1>
       <ul className="todo-list">
-        <li>
+        {todos.map(todo => {
+          return <li key={todo.id}>
           <label>
-            <input type="checkbox" />
-            A todo list
+            <input type="checkbox"
+            checked={todo.completed}
+            onChange={e => toggleTodo(todo.id, e.target.checked)} />
+            {todo.title}
           </label>
           <button className="delete-btn">Delete</button>
         </li>
-      </ul>
-      <ul className="todo-list">
-        <li>
-          <label>
-            <input type="checkbox" />
-            A todo list
-          </label>
-          <button className="delete-btn">Delete</button>
-        </li>
+        })}
       </ul>
     </>
   )
