@@ -1,12 +1,20 @@
-import "./style.css"
+import { useState } from "react"
+import './style.css'
 
 export default function App() {
+  const [newItem, setNewItem] = useState("")
+
   return (
     <>
-      <form className="add-todo-form">
+      <form  className="add-todo-form">
         <div className="form-row">
           <label htmlFor="add-todo">New Item</label>
-          <input type="text" id="add-todo" placeholder="Write your todo" />
+          <input 
+            value={newItem}
+            onChange = {e => setNewItem(e.target.value)}
+            type="text"
+            id="add-todo"
+            placeholder="Write your todo" />
         </div>
         <button className="btn">Add</button>
       </form>
